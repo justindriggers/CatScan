@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="default_primary">#607D8B</color>
+    <color name="default_primary_dark">#263238</color>
+
+    <color name="verbose">#9E9E9E</color>
+    <color name="verbose_dark">#212121</color>
+
+    <color name="debug">#2196F3</color>
+    <color name="debug_dark">#0D47A1</color>
+
+    <color name="info">#4CAF50</color>
+    <color name="info_dark">#1B5E20</color>
+
+    <color name="warn">#FF9800</color>
+    <color name="warn_dark">#E65100</color>
+
+    <color name="error">#F44336</color>
+    <color name="error_dark">#B71C1C</color>
+
+    <color name="fatal">#F44336</color>
+    <color name="fatal_dark">#B71C1C</color>
+</resources>
