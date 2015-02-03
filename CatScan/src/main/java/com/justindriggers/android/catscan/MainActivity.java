@@ -1,5 +1,6 @@
 package com.justindriggers.android.catscan;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
@@ -71,6 +72,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int index, long id) {
-
+//        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, view, "test");
+        startActivity(new Intent(this, LogDetailActivity.class).putExtra("type", adapter.getItem(index).getPriority().getThemeResource()));
     }
 }

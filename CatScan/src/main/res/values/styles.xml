@@ -4,40 +4,40 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/default_primary</item>
         <item name="colorPrimaryDark">@color/default_primary_dark</item>
-        <!--<item name="colorAccent">@color/accent</item>-->
+        <item name="colorAccent">@android:color/white</item>
     </style>
 
-    <style name="VerboseTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="VerboseTheme" parent="AppTheme">
         <item name="colorPrimary">@color/verbose</item>
         <item name="colorPrimaryDark">@color/verbose_dark</item>
         <!--<item name="colorAccent">@color/accent</item>-->
     </style>
 
-    <style name="DebugTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="DebugTheme" parent="AppTheme">
         <item name="colorPrimary">@color/debug</item>
         <item name="colorPrimaryDark">@color/debug_dark</item>
         <!--<item name="colorAccent">@color/accent</item>-->
     </style>
 
-    <style name="InfoTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="InfoTheme" parent="AppTheme">
         <item name="colorPrimary">@color/info</item>
         <item name="colorPrimaryDark">@color/info_dark</item>
         <!--<item name="colorAccent">@color/accent</item>-->
     </style>
 
-    <style name="WarnTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="WarnTheme" parent="AppTheme">
         <item name="colorPrimary">@color/warn</item>
         <item name="colorPrimaryDark">@color/warn_dark</item>
         <!--<item name="colorAccent">@color/accent</item>-->
     </style>
 
-    <style name="ErrorTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="ErrorTheme" parent="AppTheme">
         <item name="colorPrimary">@color/error</item>
         <item name="colorPrimaryDark">@color/error_dark</item>
         <!--<item name="colorAccent">@color/accent</item>-->
     </style>
 
-    <style name="FatalTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="FatalTheme" parent="AppTheme">
         <item name="colorPrimary">@color/fatal</item>
         <item name="colorPrimaryDark">@color/fatal_dark</item>
         <!--<item name="colorAccent">@color/accent</item>-->
