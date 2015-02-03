@@ -1,4 +1,4 @@
-package com.justindriggers.android.catscan;
+package com.justindriggers.android.catscan.navigationDrawer;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import com.justindriggers.android.catscan.R;
 
 import java.util.List;
 

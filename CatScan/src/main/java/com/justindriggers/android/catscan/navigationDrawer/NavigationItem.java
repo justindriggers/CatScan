@@ -1,4 +1,4 @@
-package com.justindriggers.android.catscan;
+package com.justindriggers.android.catscan.navigationDrawer;
 
 import android.graphics.drawable.Drawable;
 

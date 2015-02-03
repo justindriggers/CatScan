@@ -59,6 +59,6 @@ public class LoggingFragment extends ListFragment {
 
     @Override
     public void onListItemClick(ListView listView, View view, int position, long id) {
-
+        getActivity().setTheme(mAdapter.getItem(position).getPriority().getThemeResource());
     }
 }

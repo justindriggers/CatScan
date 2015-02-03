@@ -1,8 +1,6 @@
 package com.justindriggers.android.catscan;
 
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.StyleableRes;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -45,16 +43,5 @@ public class LogDetailActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void setTheme(@StyleableRes int resid) {
-        super.setTheme(resid);
-
-        int statusBarColor = obtainStyledAttributes(resid, new int[]{R.attr.colorPrimaryDark}).getColor(0, R.color.verbose_dark);
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(statusBarColor);
-        }
     }
 }
