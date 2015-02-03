@@ -3,6 +3,9 @@
     <color name="default_primary">#607D8B</color>
     <color name="default_primary_dark">#263238</color>
 
+    <color name="drawer_background">#F2F2F2</color>
+    <color name="drawer_selected">#ffdbdbdb</color>
+
     <color name="verbose">#9E9E9E</color>
     <color name="verbose_dark">#212121</color>
 

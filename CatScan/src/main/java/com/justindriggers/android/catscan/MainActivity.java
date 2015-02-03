@@ -1,56 +1,30 @@
 package com.justindriggers.android.catscan;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
+public class MainActivity extends ActionBarActivity implements NavigationDrawerCallbacks {
 
-public class MainActivity extends ActionBarActivity implements AdapterView.OnItemClickListener {
-
-    private Handler mHandler;
-    private ListView listView;
-    private LogEntityAdapter adapter;
-    private List<LogEntity> logs;
-    private LogReaderTask logReaderTask;
+    private Toolbar mToolbar;
+    private NavigationDrawerFragment mNavigationDrawerFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        listView = (ListView) findViewById(android.R.id.list);
-        listView.setOnItemClickListener(this);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
 
-        logs = new ArrayList<>();
-        adapter = new LogEntityAdapter(this, logs);
+        mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_drawer);
+        mNavigationDrawerFragment.setup(R.id.fragment_drawer, (DrawerLayout) findViewById(R.id.drawer), mToolbar);
 
-        listView.setAdapter(adapter);
-        listView.setOnScrollListener(new LogScrollListener());
-
-        mHandler = new LogHandler(adapter);
-
-        logReaderTask = new LogReaderTask(mHandler);
-        logReaderTask.execute();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        listView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
-    }
-
-    @Override
-    protected void onDestroy() {
-        logReaderTask.stopTask();
-        super.onDestroy();
+        getSupportFragmentManager().beginTransaction().add(R.id.container, new LoggingFragment()).commit();
     }
 
     @Override
@@ -76,8 +50,15 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int index, long id) {
-//        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, view, "test");
-        startActivity(new Intent(this, LogDetailActivity.class).putExtra("type", adapter.getItem(index).getPriority().getThemeResource()));
+    public void onNavigationDrawerItemSelected(int position) {
+        Toast.makeText(this, "Menu item selected -> " + position, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(mNavigationDrawerFragment.isDrawerOpen())
+            mNavigationDrawerFragment.closeDrawer();
+        else
+            super.onBackPressed();
     }
 }

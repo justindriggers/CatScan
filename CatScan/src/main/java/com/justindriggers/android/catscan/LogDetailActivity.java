@@ -4,17 +4,24 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.StyleableRes;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
 public class LogDetailActivity extends ActionBarActivity {
 
+    private Toolbar mToolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(getIntent().getIntExtra("type", R.style.VerboseTheme));
         setContentView(R.layout.activity_log_detail);
+
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+
+        setTheme(getIntent().getIntExtra("type", R.style.VerboseTheme));
     }
 
 
