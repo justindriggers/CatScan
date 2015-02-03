@@ -38,7 +38,10 @@ public class LoggingFragment extends ListFragment {
         View v = super.onCreateView(inflater, container, savedInstanceState);
 
         ListView listView = (ListView) v.findViewById(android.R.id.list);
+        listView.setFastScrollEnabled(true);
+        listView.setFastScrollAlwaysVisible(true);
         listView.setOnScrollListener(new LogScrollListener());
+
         return v;
     }
 
