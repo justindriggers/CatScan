@@ -18,13 +18,13 @@ public class NavigationDrawer {
     private MainActivity mActivity;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
     private DrawerLayout mDrawerLayout;
-    private View mFragmentContainerView;
+    private View mDrawerContainer;
     private NavigationDrawerAdapter mAdapter;
 
     public NavigationDrawer(MainActivity activity, Toolbar toolbar) {
         this.mActivity = activity;
 
-        mFragmentContainerView = mActivity.findViewById(R.id.drawerContainer);
+        mDrawerContainer = mActivity.findViewById(R.id.drawerContainer);
 
         initDrawerLayout(toolbar);
         initDrawerList();
@@ -62,15 +62,15 @@ public class NavigationDrawer {
     }
 
     public boolean isDrawerOpen() {
-        return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
+        return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mDrawerContainer);
     }
 
     public void openDrawer() {
-        mDrawerLayout.openDrawer(mFragmentContainerView);
+        mDrawerLayout.openDrawer(mDrawerContainer);
     }
 
     public void closeDrawer() {
-        mDrawerLayout.closeDrawer(mFragmentContainerView);
+        mDrawerLayout.closeDrawer(mDrawerContainer);
     }
 
     public List<NavigationItem> getMenu() {
