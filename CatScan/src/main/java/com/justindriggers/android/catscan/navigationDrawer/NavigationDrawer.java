@@ -3,10 +3,9 @@ package com.justindriggers.android.catscan.navigationDrawer;
 import android.content.res.Configuration;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ListView;
 import com.justindriggers.android.catscan.MainActivity;
 import com.justindriggers.android.catscan.R;
 
@@ -45,15 +44,11 @@ public class NavigationDrawer {
     }
 
     private void initDrawerList() {
-        RecyclerView drawerList = (RecyclerView) mActivity.findViewById(R.id.drawerList);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(mActivity);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        drawerList.setLayoutManager(layoutManager);
-        drawerList.setHasFixedSize(true);
+        ListView drawerList = (ListView) mActivity.findViewById(R.id.drawerList);
 
         final List<NavigationItem> navigationItems = getMenu();
-        mAdapter = new NavigationDrawerAdapter(navigationItems);
-        mAdapter.setNavigationDrawerCallbacks(mActivity);
+        mAdapter = new NavigationDrawerAdapter(mActivity, navigationItems);
+//        mAdapter.setNavigationDrawerCallbacks(mActivity);
         drawerList.setAdapter(mAdapter);
     }
 
@@ -75,13 +70,16 @@ public class NavigationDrawer {
 
     public List<NavigationItem> getMenu() {
         List<NavigationItem> items = new ArrayList<>();
-        items.add(new NavigationItem("item 1", mActivity.getResources().getDrawable(R.drawable.ic_launcher)));
-        items.add(new NavigationItem("item 2", mActivity.getResources().getDrawable(R.drawable.ic_launcher)));
-        items.add(new NavigationItem("item 3", mActivity.getResources().getDrawable(R.drawable.ic_launcher)));
+        items.add(new NavigationItem("Main", mActivity.getResources().getDrawable(R.drawable.ic_smartphone_black_24dp)));
+        items.add(new NavigationItem("Event", mActivity.getResources().getDrawable(R.drawable.ic_info_black_24dp)));
+        items.add(new NavigationItem("Modem", mActivity.getResources().getDrawable(R.drawable.ic_network_cell_black_24dp)));
+        items.add(new NavigationItem("Audit", mActivity.getResources().getDrawable(R.drawable.ic_https_black_24dp)));
+        items.add(new NavigationItem("Kernel", mActivity.getResources().getDrawable(R.drawable.ic_bug_report_black_24dp)));
+        items.add(new NavigationItem("Last Kernel", mActivity.getResources().getDrawable(R.drawable.ic_history_black_24dp)));
         return items;
     }
 
-    public void setSelectedItem(int position) {
-        mAdapter.selectPosition(position);
-    }
+//    public void setSelectedItem(int position) {
+//        mAdapter.selectPosition(position);
+//    }
 }

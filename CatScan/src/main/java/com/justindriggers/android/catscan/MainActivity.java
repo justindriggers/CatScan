@@ -47,7 +47,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             mSelectedNavPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
         }
 
-        mNavigationDrawer.setSelectedItem(mSelectedNavPosition);
+//        mNavigationDrawer.setSelectedItem(mSelectedNavPosition);
     }
 
     @Override

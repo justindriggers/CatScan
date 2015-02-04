@@ -29,7 +29,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="start">
 
-            <android.support.v7.widget.RecyclerView
+            <ListView
                 android:id="@+id/drawerList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -37,7 +37,9 @@
                 android:focusableInTouchMode="true"
                 android:scrollbars="vertical"
                 android:focusable="true"
-                android:background="@color/drawer_background"/>
+                android:background="@color/drawer_background"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="0dp"/>
 
         </FrameLayout>
 
