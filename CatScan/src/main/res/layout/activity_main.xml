@@ -6,9 +6,9 @@
     <android.support.v7.widget.Toolbar
         style="@style/ToolBarStyle"
         android:id="@+id/toolbar"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
         android:layout_width="match_parent"
-        android:minHeight="@dimen/abc_action_bar_default_height_material"
+        android:minHeight="?attr/actionBarSize"
         android:background="?attr/colorPrimary"/>
 
     <android.support.v4.widget.DrawerLayout
