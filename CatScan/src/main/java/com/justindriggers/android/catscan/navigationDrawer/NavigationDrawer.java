@@ -1,38 +1,38 @@
 package com.justindriggers.android.catscan.navigationDrawer;
 
+import android.app.Activity;
 import android.content.res.Configuration;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
-import com.justindriggers.android.catscan.MainActivity;
 import com.justindriggers.android.catscan.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class NavigationDrawer {
+public class NavigationDrawer implements AdapterView.OnItemClickListener {
 
-    private MainActivity mActivity;
+    private Activity mActivity;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private View mDrawerContainer;
     private NavigationDrawerAdapter mAdapter;
 
-    public NavigationDrawer(MainActivity activity, Toolbar toolbar) {
-        this.mActivity = activity;
+    public NavigationDrawer(Activity parentActivity) {
+        this.mActivity = parentActivity;
 
-        mDrawerContainer = mActivity.findViewById(R.id.drawerContainer);
-
-        initDrawerLayout(toolbar);
+        initDrawerLayout();
         initDrawerList();
     }
 
-    private void initDrawerLayout(Toolbar toolbar) {
-        mDrawerLayout = (DrawerLayout) mActivity.findViewById(R.id.drawer);
+    private void initDrawerLayout() {
+        this.mDrawerLayout = (DrawerLayout) mActivity.findViewById(R.id.drawer);
+        this.mDrawerContainer = mActivity.findViewById(R.id.drawerContainer);
 
-        mActionBarDrawerToggle = new MainActionBarDrawerToggle(mActivity, mDrawerLayout, toolbar);
+        mActionBarDrawerToggle = new MainActionBarDrawerToggle(mActivity, mDrawerLayout, (Toolbar) mActivity.findViewById(R.id.toolbar));
 
         mDrawerLayout.post(new Runnable() {
             @Override
@@ -44,12 +44,13 @@ public class NavigationDrawer {
     }
 
     private void initDrawerList() {
-        ListView drawerList = (ListView) mActivity.findViewById(R.id.drawerList);
+        ListView drawerList = (ListView) mDrawerContainer.findViewById(R.id.drawerList);
 
         final List<NavigationItem> navigationItems = getMenu();
-        mAdapter = new NavigationDrawerAdapter(mActivity, navigationItems);
+        mAdapter = new NavigationDrawerAdapter(mActivity.getApplicationContext(), navigationItems);
 //        mAdapter.setNavigationDrawerCallbacks(mActivity);
         drawerList.setAdapter(mAdapter);
+        drawerList.setOnItemClickListener(this);
     }
 
     public void onConfigurationChanged(Configuration newConfig) {
@@ -79,7 +80,13 @@ public class NavigationDrawer {
         return items;
     }
 
-//    public void setSelectedItem(int position) {
-//        mAdapter.selectPosition(position);
-//    }
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+        if(position != mAdapter.getSelectedIndex()) {
+            // TODO Activity stuff
+            closeDrawer();
+            mAdapter.setSelectedIndex(position);
+            mAdapter.notifyDataSetChanged();
+        }
+    }
 }

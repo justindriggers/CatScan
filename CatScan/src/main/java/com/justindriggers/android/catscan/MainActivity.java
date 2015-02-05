@@ -41,7 +41,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
-        mNavigationDrawer = new NavigationDrawer(this, mToolbar);
+        mNavigationDrawer = new NavigationDrawer(this);
 
         if(savedInstanceState != null) {
             mSelectedNavPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
@@ -107,7 +107,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(statusBarColor);
-            getWindow().setNavigationBarColor(statusBarColor);
+//            getWindow().setNavigationBarColor(statusBarColor);
         }
     }
 
