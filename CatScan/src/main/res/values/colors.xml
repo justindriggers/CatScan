@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="default_primary">#00BCD4</color>
-    <color name="default_primary_dark">#0097A7</color>
+    <color name="default_primary">#0097A7</color>
+    <color name="default_primary_dark">#006064</color>
 
-    <color name="drawer_background">#FFFFFF</color>
-    <color name="drawer_dark">#9E9E9E</color>
-    <color name="drawer_selected">#ffdbdbdb</color>
+    <color name="drawer_background">#FFF</color>
 
     <color name="verbose">#9E9E9E</color>
     <color name="verbose_dark">#616161</color>
