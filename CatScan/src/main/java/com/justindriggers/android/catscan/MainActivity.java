@@ -112,7 +112,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     }
 
     /**
-     * mAdapter.getItem(position).doSomething();
+     * doSomethingWith(mAdapter.getItem(position));
      */
     @Override
     public void onNavigationDrawerItemSelected(int position) {
