@@ -4,16 +4,16 @@ import android.app.Activity;
 import android.content.res.Configuration;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import com.justindriggers.android.catscan.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class NavigationDrawer implements AdapterView.OnItemClickListener {
+public class NavigationDrawer {
 
     private Activity mActivity;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
@@ -44,13 +44,24 @@ public class NavigationDrawer implements AdapterView.OnItemClickListener {
     }
 
     private void initDrawerList() {
-        ListView drawerList = (ListView) mDrawerContainer.findViewById(R.id.drawerList);
+        RecyclerView recyclerView = (RecyclerView) mDrawerContainer.findViewById(R.id.drawerRecyclerView);
 
-        final List<NavigationItem> navigationItems = getMenu();
-        mAdapter = new NavigationDrawerAdapter(mActivity.getApplicationContext(), navigationItems);
-//        mAdapter.setNavigationDrawerCallbacks(mActivity);
-        drawerList.setAdapter(mAdapter);
-        drawerList.setOnItemClickListener(this);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(mActivity);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
+
+        recyclerView.setHasFixedSize(true);
+
+        mAdapter = new NavigationDrawerAdapter(mActivity.getApplicationContext(), getMenu());
+        recyclerView.setAdapter(mAdapter);
+    }
+
+    public void setSelectedIndex(int position) {
+        mAdapter.setSelectedIndex(position);
+    }
+
+    public void setOnNavigationItemSelectedListener(OnNavigationItemSelectedListener onNavigationItemSelectedListener) {
+        mAdapter.setOnNavigationSelectedListener(onNavigationItemSelectedListener);
     }
 
     public void onConfigurationChanged(Configuration newConfig) {
@@ -69,7 +80,7 @@ public class NavigationDrawer implements AdapterView.OnItemClickListener {
         mDrawerLayout.closeDrawer(mDrawerContainer);
     }
 
-    public List<NavigationItem> getMenu() {
+    private List<NavigationItem> getMenu() {
         List<NavigationItem> items = new ArrayList<>();
         items.add(new NavigationItem("Main", mActivity.getResources().getDrawable(R.drawable.ic_smartphone_black_24dp)));
         items.add(new NavigationItem("Event", mActivity.getResources().getDrawable(R.drawable.ic_info_black_24dp)));
@@ -78,15 +89,5 @@ public class NavigationDrawer implements AdapterView.OnItemClickListener {
         items.add(new NavigationItem("Kernel", mActivity.getResources().getDrawable(R.drawable.ic_bug_report_black_24dp)));
         items.add(new NavigationItem("Last Kernel", mActivity.getResources().getDrawable(R.drawable.ic_history_black_24dp)));
         return items;
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-        if(position != mAdapter.getSelectedIndex()) {
-            // TODO Activity stuff
-            closeDrawer();
-            mAdapter.setSelectedIndex(position);
-            mAdapter.notifyDataSetChanged();
-        }
     }
 }

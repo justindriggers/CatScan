@@ -2,7 +2,6 @@ package com.justindriggers.android.catscan;
 
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.StyleableRes;
 import android.support.v4.app.Fragment;
@@ -10,13 +9,14 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 import com.justindriggers.android.catscan.navigationDrawer.NavigationDrawer;
-import com.justindriggers.android.catscan.navigationDrawer.NavigationDrawerCallbacks;
+import com.justindriggers.android.catscan.navigationDrawer.OnNavigationItemSelectedListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends ActionBarActivity implements NavigationDrawerCallbacks {
+public class MainActivity extends ActionBarActivity implements OnNavigationItemSelectedListener {
 
     private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
     private static final List<Fragment> FRAGMENTS = new ArrayList<>();
@@ -29,6 +29,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         FRAGMENTS.add(loggingFragment);
     }
 
+    private LinearLayout mLayout;
     private Toolbar mToolbar;
     private NavigationDrawer mNavigationDrawer;
     private int mSelectedNavPosition = 0;
@@ -38,16 +39,18 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mLayout = (LinearLayout) findViewById(R.id.layout);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
         mNavigationDrawer = new NavigationDrawer(this);
+        mNavigationDrawer.setOnNavigationItemSelectedListener(this);
 
         if(savedInstanceState != null) {
             mSelectedNavPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
         }
 
-//        mNavigationDrawer.setSelectedItem(mSelectedNavPosition);
+        mNavigationDrawer.setSelectedIndex(mSelectedNavPosition);
     }
 
     @Override
@@ -99,15 +102,13 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
         TypedArray attributes = obtainStyledAttributes(resid, new int[]{R.attr.colorPrimary, R.attr.colorPrimaryDark});
         int toolBarColor = attributes.getColor(0, R.color.verbose);
-        int statusBarColor = attributes.getColor(1, R.color.verbose_dark);
 
-        if(mToolbar != null) {
-            mToolbar.setBackgroundColor(toolBarColor);
+        if (mLayout != null) {
+            mLayout.setBackgroundColor(toolBarColor);
         }
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(statusBarColor);
-//            getWindow().setNavigationBarColor(statusBarColor);
+        if (mToolbar != null) {
+            mToolbar.setBackgroundColor(toolBarColor);
         }
     }
 
@@ -115,7 +116,11 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
      * doSomethingWith(mAdapter.getItem(position));
      */
     @Override
-    public void onNavigationDrawerItemSelected(int position) {
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, FRAGMENTS.get(position)).commit();
+    public void onNavigationItemSelected(int position) {
+        mNavigationDrawer.closeDrawer();
+
+        if (position < FRAGMENTS.size()) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, FRAGMENTS.get(position)).commit();
+        }
     }
 }

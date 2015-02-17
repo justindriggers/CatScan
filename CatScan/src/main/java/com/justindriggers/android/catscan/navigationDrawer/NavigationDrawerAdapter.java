@@ -4,74 +4,67 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import com.justindriggers.android.catscan.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class NavigationDrawerAdapter extends ArrayAdapter<NavigationItem> {
+public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationViewHolder> {
 
     private static final float DEFAULT_TEXT_ALPHA = 0.87f;
     private static final float DEFAULT_ICON_ALPHA = 0.54f;
     private static final float SELECTED_ALPHA = 1.0f;
 
-    private Context mContext;
-    private LayoutInflater mLayoutInflater;
     private List<NavigationItem> mNavigationItems;
-    private int mSelectedIndex = 0;
-    private int selectedColor;
+    private OnNavigationItemSelectedListener mOnNavigationSelectedListener;
+    private int mSelectedColor = Color.BLACK;
 
-    public NavigationDrawerAdapter(Context context, List<NavigationItem> navigationItems) {
-        super(context, R.layout.drawer_row, navigationItems);
-        this.mContext = context;
-        this.mNavigationItems = navigationItems;
+    private int mSelectedIndex;
 
-        mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    public NavigationDrawerAdapter(Context context, List<NavigationItem> items) {
+        mSelectedColor = context.getResources().getColor(R.color.default_primary);
 
-        selectedColor = mContext.getResources().getColor(R.color.default_primary);
-    }
-
-    @Override
-    public int getCount() {
-        return mNavigationItems != null ? mNavigationItems.size() : 0;
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public NavigationItem getItem(int position) {
-        return mNavigationItems != null ? mNavigationItems.get(position) : null;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View view = convertView;
-
-        if(view == null) {
-            view = mLayoutInflater.inflate(R.layout.drawer_row, null);
+        if (items == null) {
+            this.mNavigationItems = new ArrayList<>();
+        } else {
+            this.mNavigationItems = items;
         }
+    }
 
-        NavigationItem item = getItem(position);
+    @Override
+    public NavigationViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.drawer_row, parent, false);
+
+        return new NavigationViewHolder(itemView);
+    }
+
+    @Override
+    public int getItemCount() {
+        return mNavigationItems.size();
+    }
+
+    @Override
+    public void onBindViewHolder(NavigationViewHolder holder, final int position) {
+        NavigationItem item = mNavigationItems.get(position);
 
         if(item != null) {
-            TextView textView = (TextView) view.findViewById(R.id.item_name);
+            TextView textView = holder.textView;
             textView.setCompoundDrawablesWithIntrinsicBounds(item.getDrawable(), null, null, null);
             textView.setText(item.getText());
 
             Drawable icon = textView.getCompoundDrawables()[0].mutate();
 
             if(position == mSelectedIndex) {
-                textView.setTextColor(selectedColor);
+                textView.setTextColor(mSelectedColor);
                 textView.setAlpha(SELECTED_ALPHA);
                 icon.setAlpha((int) (255 * SELECTED_ALPHA));
-                icon.setColorFilter(selectedColor, PorterDuff.Mode.SRC_ATOP);
+                icon.setColorFilter(mSelectedColor, PorterDuff.Mode.SRC_ATOP);
             } else {
                 textView.setTextColor(Color.BLACK);
                 textView.setAlpha(DEFAULT_TEXT_ALPHA);
@@ -80,14 +73,31 @@ public class NavigationDrawerAdapter extends ArrayAdapter<NavigationItem> {
             }
         }
 
-        return view;
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setSelectedIndex(position);
+            }
+        });
+    }
+
+    public void setOnNavigationSelectedListener(OnNavigationItemSelectedListener onNavigationSelectedListener) {
+        this.mOnNavigationSelectedListener = onNavigationSelectedListener;
     }
 
     public int getSelectedIndex() {
         return mSelectedIndex;
     }
 
-    public void setSelectedIndex(int mSelectedIndex) {
-        this.mSelectedIndex = mSelectedIndex;
+    public void setSelectedIndex(int position) {
+        int oldPosition = mSelectedIndex;
+        this.mSelectedIndex = position;
+
+        this.notifyItemChanged(oldPosition);
+        this.notifyItemChanged(position);
+
+        if (mOnNavigationSelectedListener != null) {
+            mOnNavigationSelectedListener.onNavigationItemSelected(position);
+        }
     }
 }
