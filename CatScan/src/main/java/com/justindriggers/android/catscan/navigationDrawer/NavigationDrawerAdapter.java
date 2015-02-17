@@ -93,11 +93,11 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationView
         int oldPosition = mSelectedIndex;
         this.mSelectedIndex = position;
 
-        this.notifyItemChanged(oldPosition);
-        this.notifyItemChanged(position);
+        notifyItemChanged(oldPosition);
+        notifyItemChanged(position);
 
         if (mOnNavigationSelectedListener != null) {
-            mOnNavigationSelectedListener.onNavigationItemSelected(position);
+            mOnNavigationSelectedListener.onNavigationItemSelected(mNavigationItems.get(position));
         }
     }
 }

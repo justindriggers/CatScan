@@ -11,23 +11,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 import com.justindriggers.android.catscan.navigationDrawer.NavigationDrawer;
+import com.justindriggers.android.catscan.navigationDrawer.NavigationItem;
 import com.justindriggers.android.catscan.navigationDrawer.OnNavigationItemSelectedListener;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends ActionBarActivity implements OnNavigationItemSelectedListener {
 
     private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
-    private static final List<Fragment> FRAGMENTS = new ArrayList<>();
-
-    static {
-        LoggingFragment loggingFragment = new LoggingFragment();
-
-        FRAGMENTS.add(loggingFragment);
-        FRAGMENTS.add(loggingFragment);
-        FRAGMENTS.add(loggingFragment);
-    }
 
     private LinearLayout mLayout;
     private Toolbar mToolbar;
@@ -112,15 +101,14 @@ public class MainActivity extends ActionBarActivity implements OnNavigationItemS
         }
     }
 
-    /**
-     * doSomethingWith(mAdapter.getItem(position));
-     */
     @Override
-    public void onNavigationItemSelected(int position) {
+    public void onNavigationItemSelected(NavigationItem selectedItem) {
         mNavigationDrawer.closeDrawer();
 
-        if (position < FRAGMENTS.size()) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.container, FRAGMENTS.get(position)).commit();
+        Fragment fragment = selectedItem.getFragment();
+
+        if (fragment != null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
         }
     }
 }
