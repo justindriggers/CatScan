@@ -1,56 +1,68 @@
 package com.justindriggers.android.catscan;
 
-import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.TypedArray;
 import android.os.Bundle;
-import android.os.Handler;
+import android.support.annotation.StyleableRes;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.LinearLayout;
+import com.justindriggers.android.catscan.navigationDrawer.NavigationDrawer;
+import com.justindriggers.android.catscan.navigationDrawer.OnNavigationItemSelectedListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends ActionBarActivity implements AdapterView.OnItemClickListener {
+public class MainActivity extends ActionBarActivity implements OnNavigationItemSelectedListener {
 
-    private Handler mHandler;
-    private ListView listView;
-    private LogEntityAdapter adapter;
-    private List<LogEntity> logs;
-    private LogReaderTask logReaderTask;
+    private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
+    private static final List<Fragment> FRAGMENTS = new ArrayList<>();
+
+    static {
+        LoggingFragment loggingFragment = new LoggingFragment();
+
+        FRAGMENTS.add(loggingFragment);
+        FRAGMENTS.add(loggingFragment);
+        FRAGMENTS.add(loggingFragment);
+    }
+
+    private LinearLayout mLayout;
+    private Toolbar mToolbar;
+    private NavigationDrawer mNavigationDrawer;
+    private int mSelectedNavPosition = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        listView = (ListView) findViewById(android.R.id.list);
-        listView.setOnItemClickListener(this);
+        mLayout = (LinearLayout) findViewById(R.id.layout);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
 
-        logs = new ArrayList<>();
-        adapter = new LogEntityAdapter(this, logs);
+        mNavigationDrawer = new NavigationDrawer(this);
+        mNavigationDrawer.setOnNavigationItemSelectedListener(this);
 
-        listView.setAdapter(adapter);
-        listView.setOnScrollListener(new LogScrollListener());
+        if(savedInstanceState != null) {
+            mSelectedNavPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
+        }
 
-        mHandler = new LogHandler(adapter);
-
-        logReaderTask = new LogReaderTask(mHandler);
-        logReaderTask.execute();
+        mNavigationDrawer.setSelectedIndex(mSelectedNavPosition);
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        listView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(STATE_SELECTED_POSITION, mSelectedNavPosition);
     }
 
     @Override
-    protected void onDestroy() {
-        logReaderTask.stopTask();
-        super.onDestroy();
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mNavigationDrawer.onConfigurationChanged(newConfig);
     }
 
     @Override
@@ -76,8 +88,39 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int index, long id) {
-//        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, view, "test");
-        startActivity(new Intent(this, LogDetailActivity.class).putExtra("type", adapter.getItem(index).getPriority().getThemeResource()));
+    public void onBackPressed() {
+        if(mNavigationDrawer.isDrawerOpen()) {
+            mNavigationDrawer.closeDrawer();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public void setTheme(@StyleableRes int resid) {
+        super.setTheme(resid);
+
+        TypedArray attributes = obtainStyledAttributes(resid, new int[]{R.attr.colorPrimary, R.attr.colorPrimaryDark});
+        int toolBarColor = attributes.getColor(0, R.color.verbose);
+
+        if (mLayout != null) {
+            mLayout.setBackgroundColor(toolBarColor);
+        }
+
+        if (mToolbar != null) {
+            mToolbar.setBackgroundColor(toolBarColor);
+        }
+    }
+
+    /**
+     * doSomethingWith(mAdapter.getItem(position));
+     */
+    @Override
+    public void onNavigationItemSelected(int position) {
+        mNavigationDrawer.closeDrawer();
+
+        if (position < FRAGMENTS.size()) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, FRAGMENTS.get(position)).commit();
+        }
     }
 }
