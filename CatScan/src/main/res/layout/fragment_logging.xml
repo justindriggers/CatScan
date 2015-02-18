@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <!--<android.support.v7.widget.RecyclerView-->
+            <!--android:id="@+id/loggingRecyclerView"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"/>-->
+
+    <ListView
+            android:id="@android:id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fastScrollEnabled="true"
+            android:fastScrollAlwaysVisible="true"/>
+
+    <ImageButton
+            android:id="@+id/floatingActionButton"
+            android:layout_width="@dimen/action_button_size"
+            android:layout_height="@dimen/action_button_size"
+            android:background="@drawable/round_button_ripple"
+            android:src="@drawable/ic_expand_more_white_24dp"
+            android:contentDescription="@string/scrollToBottom"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/action_button_margin"
+            android:elevation="@dimen/action_button_elevation"
+            android:stateListAnimator="@anim/anim"/>
+
+</RelativeLayout>

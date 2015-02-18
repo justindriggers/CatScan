@@ -13,5 +13,6 @@
     <string name="warn">Warn</string>
     <string name="error">Error</string>
     <string name="fatal">Fatal</string>
+    <string name="scrollToBottom">Scroll to Bottom</string>
 
 </resources>

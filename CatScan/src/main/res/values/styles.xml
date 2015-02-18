@@ -6,7 +6,7 @@
     <style name="BaseAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/default_primary</item>
         <item name="colorPrimaryDark">@color/default_primary_dark</item>
-        <item name="colorAccent">@android:color/white</item>
+        <item name="colorAccent">@color/default_primary_accent</item>
     </style>
 
     <style name="ToolBarStyle">
