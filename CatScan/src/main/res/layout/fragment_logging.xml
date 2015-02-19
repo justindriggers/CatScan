@@ -3,17 +3,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-    <!--<android.support.v7.widget.RecyclerView-->
-            <!--android:id="@+id/loggingRecyclerView"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"/>-->
-
-    <ListView
-            android:id="@android:id/list"
+    <android.support.v7.widget.RecyclerView
+            android:id="@+id/loggingRecyclerView"
+            android:scrollbars="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fastScrollEnabled="true"
-            android:fastScrollAlwaysVisible="true"/>
+            android:layout_height="match_parent"/>
+
+    <!--<ListView-->
+            <!--android:id="@android:id/list"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:fastScrollEnabled="true"-->
+            <!--android:fastScrollAlwaysVisible="true"/>-->
 
     <ImageButton
             android:id="@+id/floatingActionButton"

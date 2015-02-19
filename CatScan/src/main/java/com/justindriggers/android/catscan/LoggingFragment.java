@@ -5,8 +5,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ListFragment;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,20 +16,21 @@ import android.view.ViewOutlineProvider;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class LoggingFragment extends ListFragment implements OnScrollToBottomListener {
+public class LoggingFragment extends Fragment implements OnLogEntityClickListener, OnScrollToBottomListener {
 
     private boolean mVisible = false;
+    private boolean mAutoScroll = true;
 
     private List<LogEntity> mLogs;
     private LogEntityAdapter mAdapter;
     private Handler mHandler;
     private LogReaderTask mLogReaderTask;
     private ImageView mActionButton;
+    private RecyclerView mRecyclerView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,7 +38,20 @@ public class LoggingFragment extends ListFragment implements OnScrollToBottomLis
 
         mLogs = new ArrayList<>();
         mAdapter = new LogEntityAdapter(getActivity(), mLogs);
-        setListAdapter(mAdapter);
+        mAdapter.setOnLogEntityClickListener(this);
+        mAdapter.setOnDataSetChangedListener(new OnDataSetChangedListener() {
+            @Override
+            public void onItemInserted(int position) {
+                if (mAutoScroll) {
+                    mRecyclerView.scrollToPosition(position);
+                    toggleButton(false);
+                }
+            }
+        });
+
+        if (mRecyclerView != null) {
+            mRecyclerView.setAdapter(mAdapter);
+        }
 
         mHandler = new LogHandler(mAdapter);
 
@@ -47,15 +63,26 @@ public class LoggingFragment extends ListFragment implements OnScrollToBottomLis
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_logging, container, false);
 
-        final ListView listView = (ListView) v.findViewById(android.R.id.list);
-        listView.setOnScrollListener(new LogScrollListener(this));
+        mRecyclerView = (RecyclerView) v.findViewById(R.id.loggingRecyclerView);
+        mRecyclerView.addItemDecoration(new SimpleRecyclerViewDivider(getActivity()));
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(layoutManager);
+
+        mRecyclerView.setOnScrollListener(new LogScrollListener(layoutManager, this));
+
+        if (mAdapter != null) {
+            mRecyclerView.setAdapter(mAdapter);
+        }
 
         mActionButton = (ImageButton) v.findViewById(R.id.floatingActionButton);
         mActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listView.setSelection(listView.getCount() - 1);
+                mRecyclerView.scrollToPosition(mAdapter.getItemCount() - 1);
                 toggleButton(false);
+                mAutoScroll = true;
             }
         });
 
@@ -78,7 +105,7 @@ public class LoggingFragment extends ListFragment implements OnScrollToBottomLis
     @Override
     public void onResume() {
         super.onResume();
-        getListView().setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+        mRecyclerView.scrollToPosition(mAdapter.getItemCount() - 1);
     }
 
     @Override
@@ -88,8 +115,8 @@ public class LoggingFragment extends ListFragment implements OnScrollToBottomLis
     }
 
     @Override
-    public void onListItemClick(ListView listView, View view, int position, long id) {
-        getActivity().setTheme(mAdapter.getItem(position).getPriority().getThemeResource());
+    public void onLogEntityClick(View source, LogEntity logEntity) {
+        getActivity().setTheme(logEntity.getPriority().getThemeResource());
     }
 
     private void toggleButton(final boolean visible) {
@@ -111,5 +138,6 @@ public class LoggingFragment extends ListFragment implements OnScrollToBottomLis
     @Override
     public void onScroll(boolean isAtBottom) {
         toggleButton(!isAtBottom);
+        mAutoScroll = isAtBottom;
     }
 }

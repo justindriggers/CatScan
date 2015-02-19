@@ -3,15 +3,14 @@ package com.justindriggers.android.catscan;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.widget.ArrayAdapter;
 
 public class LogHandler extends Handler {
 
     public static final String PAYLOAD_KEY = "payload";
 
-    private ArrayAdapter<LogEntity> mAdapter;
+    private LogEntityAdapter mAdapter;
 
-    public LogHandler(ArrayAdapter<LogEntity> adapter) {
+    public LogHandler(LogEntityAdapter adapter) {
         this.mAdapter = adapter;
     }
 
