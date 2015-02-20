@@ -1,8 +1,10 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:context="com.justindriggers.android.catscan.LogDetailActivity">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:fitsSystemWindows="true"
+        android:background="?attr/colorPrimary">
 
     <android.support.v7.widget.Toolbar
             style="@style/ToolBarStyle"
@@ -11,8 +13,13 @@
             android:layout_width="match_parent"
             android:minHeight="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            android:gravity="bottom">
+            android:gravity="bottom"
+            android:transitionName="logDetail"/>
 
-    </android.support.v7.widget.Toolbar>
+    <FrameLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/background_light"/>
 
-</RelativeLayout>
+</LinearLayout>

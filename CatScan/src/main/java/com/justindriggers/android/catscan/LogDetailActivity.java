@@ -1,14 +1,18 @@
 package com.justindriggers.android.catscan;
 
+import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.support.annotation.StyleableRes;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 
 
 public class LogDetailActivity extends ActionBarActivity {
 
+    private LinearLayout mLayout;
     private Toolbar mToolbar;
 
     @Override
@@ -16,8 +20,12 @@ public class LogDetailActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_detail);
 
+        mLayout = (LinearLayout) findViewById(R.id.layout);
+
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setTheme(getIntent().getIntExtra("type", R.style.VerboseTheme));
     }
@@ -43,5 +51,21 @@ public class LogDetailActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void setTheme(@StyleableRes int resid) {
+        super.setTheme(resid);
+
+        TypedArray attributes = obtainStyledAttributes(resid, new int[]{R.attr.colorPrimary, R.attr.colorPrimaryDark});
+        int toolBarColor = attributes.getColor(0, R.color.verbose);
+
+        if (mLayout != null) {
+            mLayout.setBackgroundColor(toolBarColor);
+        }
+
+        if (mToolbar != null) {
+            mToolbar.setBackgroundColor(toolBarColor);
+        }
     }
 }

@@ -5,8 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LogEntityAdapter extends RecyclerView.Adapter<LogEntityViewHolder> {
@@ -16,9 +16,9 @@ public class LogEntityAdapter extends RecyclerView.Adapter<LogEntityViewHolder> 
     private OnDataSetChangedListener mOnDataSetChangedListener;
     private List<LogEntity> mLogEntities;
 
-    public LogEntityAdapter(Context context, List<LogEntity> objects) {
+    public LogEntityAdapter(Context context) {
         this.mContext = context;
-        this.mLogEntities = objects;
+        this.mLogEntities = new ArrayList<>();
     }
 
     @Override
@@ -34,11 +34,12 @@ public class LogEntityAdapter extends RecyclerView.Adapter<LogEntityViewHolder> 
         LogEntity item = mLogEntities.get(position);
 
         if (item != null) {
-            holder.setItem(item);
+            holder.bind(item);
 
-            TextView textView = holder.mTextView;
-            textView.setText(item.getMessage());
-            textView.setTextColor(mContext.getResources().getColor(item.getPriority().getColorResource()));
+            int color = mContext.getResources().getColor(item.getPriority().getColorResource());
+
+            holder.mLevelIndicator.setBackgroundColor(color);
+            holder.mTextView.setText(item.getMessage());
         }
     }
 
@@ -60,6 +61,15 @@ public class LogEntityAdapter extends RecyclerView.Adapter<LogEntityViewHolder> 
 
         if (mOnDataSetChangedListener != null) {
             mOnDataSetChangedListener.onItemInserted(position);
+        }
+    }
+
+    public void addAll(List<LogEntity> logEntities) {
+        mLogEntities.addAll(logEntities);
+        notifyDataSetChanged();
+
+        if (mOnDataSetChangedListener != null) {
+            mOnDataSetChangedListener.onItemInserted(mLogEntities.size() - 1);
         }
     }
 

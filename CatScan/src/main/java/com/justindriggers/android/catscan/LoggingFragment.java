@@ -1,10 +1,11 @@
 package com.justindriggers.android.catscan;
 
+import android.content.Intent;
 import android.graphics.Outline;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,17 +18,13 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class LoggingFragment extends Fragment implements OnLogEntityClickListener, OnScrollToBottomListener {
 
     private boolean mVisible = false;
     private boolean mAutoScroll = true;
 
-    private List<LogEntity> mLogs;
     private LogEntityAdapter mAdapter;
-    private Handler mHandler;
+    private LogHandler mHandler;
     private LogReaderTask mLogReaderTask;
     private ImageView mActionButton;
     private RecyclerView mRecyclerView;
@@ -36,27 +33,30 @@ public class LoggingFragment extends Fragment implements OnLogEntityClickListene
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mLogs = new ArrayList<>();
-        mAdapter = new LogEntityAdapter(getActivity(), mLogs);
+        mHandler = new LogHandler();
+
+        mLogReaderTask = new LogReaderTask(mHandler);
+        mLogReaderTask.execute();
+
+        mAdapter = new LogEntityAdapter(getActivity());
         mAdapter.setOnLogEntityClickListener(this);
         mAdapter.setOnDataSetChangedListener(new OnDataSetChangedListener() {
             @Override
             public void onItemInserted(int position) {
                 if (mAutoScroll) {
-                    mRecyclerView.scrollToPosition(position);
-                    toggleButton(false);
+                    if (mRecyclerView != null) {
+                        mRecyclerView.scrollToPosition(position);
+                        toggleButton(false);
+                    }
                 }
             }
         });
 
+        mHandler.setAdapter(mAdapter);
+
         if (mRecyclerView != null) {
             mRecyclerView.setAdapter(mAdapter);
         }
-
-        mHandler = new LogHandler(mAdapter);
-
-        mLogReaderTask = new LogReaderTask(mHandler);
-        mLogReaderTask.execute();
     }
 
     @Override
@@ -115,8 +115,13 @@ public class LoggingFragment extends Fragment implements OnLogEntityClickListene
     }
 
     @Override
-    public void onLogEntityClick(View source, LogEntity logEntity) {
-        getActivity().setTheme(logEntity.getPriority().getThemeResource());
+    public void onLogEntityClick(LogEntityViewHolder holder, LogEntity logEntity) {
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), holder.mLevelIndicator, "logDetail");
+
+        Intent intent = new Intent(getActivity().getApplicationContext(), LogDetailActivity.class);
+        intent.putExtra("type", logEntity.getPriority().getThemeResource());
+
+        getActivity().startActivity(intent, options.toBundle());
     }
 
     private void toggleButton(final boolean visible) {

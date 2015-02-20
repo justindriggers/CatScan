@@ -6,27 +6,29 @@ import android.widget.TextView;
 
 public class LogEntityViewHolder extends RecyclerView.ViewHolder {
 
+    View mLevelIndicator;
     TextView mTextView;
 
     private OnLogEntityClickListener mOnLogEntityClickListener;
     private LogEntity mLogEntity;
 
-    public LogEntityViewHolder(View itemView, final OnLogEntityClickListener onLogEntityClickListener) {
+    public LogEntityViewHolder(View itemView, OnLogEntityClickListener onLogEntityClickListener) {
         super(itemView);
-        this.mTextView = (TextView) itemView.findViewById(android.R.id.text1);
+        this.mLevelIndicator = itemView.findViewById(R.id.levelIndicator);
+        this.mTextView = (TextView) itemView.findViewById(R.id.text);
         this.mOnLogEntityClickListener = onLogEntityClickListener;
 
         this.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mOnLogEntityClickListener != null && mLogEntity != null) {
-                    mOnLogEntityClickListener.onLogEntityClick(view, mLogEntity);
+                    mOnLogEntityClickListener.onLogEntityClick(LogEntityViewHolder.this, mLogEntity);
                 }
             }
         });
     }
 
-    public void setItem(LogEntity logEntity) {
+    public void bind(LogEntity logEntity) {
         this.mLogEntity = logEntity;
     }
 }
